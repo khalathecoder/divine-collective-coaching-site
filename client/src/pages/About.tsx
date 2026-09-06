@@ -27,6 +27,9 @@ export default function About() {
             <div className="w-full max-w-3xl">
               <img
                 src={divineBrandingImage}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 alt="Divine Collective - Empowering Women, Transforming Lives, Impacting Generations"
                 className="h-auto w-full object-contain"
               />
@@ -45,6 +48,8 @@ export default function About() {
             <div className="relative overflow-hidden rounded-[2rem] border border-brand-gold/30 bg-black shadow-[0_35px_90px_rgba(8,6,18,0.15)] max-w-lg">
               <img
                 src={nancyHeadshot}
+                loading="lazy"
+                decoding="async"
                 alt="Nancy Marie Dixon - Certified Christian Life Coach"
                 className="h-auto w-full max-w-lg object-cover"
               />

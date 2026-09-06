@@ -21,19 +21,33 @@ import BlogArticle from "./pages/BlogArticle";
 import Contact from "./pages/Contact";
 import Events from "./pages/Events";
 import Programs from "./pages/Programs";
-import { PrivacyPolicy } from "./pages/PrivacyPolicy";
-import Orders from "./pages/Orders";
-import PostPurchaseSurvey from "./pages/PostPurchaseSurvey";
-import AdminSubmissions from "./pages/AdminSubmissions";
-import Login from "./pages/Login";
+// Route-level code splitting. None of these are reachable from search or
+// needed on a first visit, so keeping them out of the entry chunk shortens
+// the download every public visitor pays for.
+const PrivacyPolicy = lazy(() =>
+  import("./pages/PrivacyPolicy").then(m => ({ default: m.PrivacyPolicy }))
+);
+const Orders = lazy(() => import("./pages/Orders"));
+const PostPurchaseSurvey = lazy(() => import("./pages/PostPurchaseSurvey"));
+const AdminSubmissions = lazy(() => import("./pages/AdminSubmissions"));
+const Login = lazy(() => import("./pages/Login"));
 const StandaloneAssessment = lazy(() => import("./pages/StandaloneAssessment"));
 const BoldOutSurvey = lazy(() => import("./pages/BoldOutSurvey"));
 
-function LoadingShell({ label = "Preparing your assessment…", description = "Your experience is loading now. This should only take a moment." }: { label?: string; description?: string }) {
+function LoadingShell({
+  label = "Preparing your assessment…",
+  description = "Your experience is loading now. This should only take a moment.",
+}: {
+  label?: string;
+  description?: string;
+}) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-black px-6 text-center text-cream">
       <div className="max-w-md space-y-5">
-        <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-brand-gold/25 border-t-brand-gold" aria-hidden="true" />
+        <div
+          className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-brand-gold/25 border-t-brand-gold"
+          aria-hidden="true"
+        />
         <p className="eyebrow text-brand-gold">Purely Divine Coaching</p>
         <h1 className="font-display text-3xl">{label}</h1>
         <p className="text-sm leading-6 text-cream/65">{description}</p>
@@ -56,37 +70,54 @@ function AssessmentRoute({ kind }: { kind: "voice" | "mindset" }) {
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/shop" component={Shop} />
-      <Route path="/voice-quiz" component={() => <AssessmentRoute kind="voice" />} />
-      <Route path="/divine-mindset-assessment" component={() => <AssessmentRoute kind="mindset" />} />
-      <Route
-        path="/bold-out-intake"
-        component={() => (
-          <Suspense fallback={<LoadingShell label="Preparing your intake survey…" description="Your private B.O.L.D. OUT intake is loading now." />}>
-            <BoldOutSurvey />
-          </Suspense>
-        )}
-      />
-      <Route path="/coaching" component={Coaching} />
-      <Route path="/blog" component={Blog} />
-      {/* /blog/archive must stay above /blog/:slug so the literal path wins. */}
-      <Route path="/blog/archive" component={BlogArchive} />
-      <Route path="/blog/:slug" component={BlogArticle} />
-      <Route path="/about" component={About} />
-      <Route path="/events" component={Events} />
-      <Route path="/programs" component={Programs} />
-      <Route path="/contact" component={Contact} />
-      <Route path="/privacy" component={PrivacyPolicy} />
-      <Route path="/orders" component={Orders} />
-      <Route path="/survey" component={PostPurchaseSurvey} />
-      <Route path="/login" component={Login} />
-      <Route path="/admin" component={AdminSubmissions} />
-      <Route path="/admin/submissions" component={AdminSubmissions} />
-      <Route path="/404" component={NotFound} />
-      <Route component={NotFound} />
-    </Switch>
+    <Suspense
+      fallback={<LoadingShell label="Loading…" description="One moment." />}
+    >
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/shop" component={Shop} />
+        <Route
+          path="/voice-quiz"
+          component={() => <AssessmentRoute kind="voice" />}
+        />
+        <Route
+          path="/divine-mindset-assessment"
+          component={() => <AssessmentRoute kind="mindset" />}
+        />
+        <Route
+          path="/bold-out-intake"
+          component={() => (
+            <Suspense
+              fallback={
+                <LoadingShell
+                  label="Preparing your intake survey…"
+                  description="Your private B.O.L.D. OUT intake is loading now."
+                />
+              }
+            >
+              <BoldOutSurvey />
+            </Suspense>
+          )}
+        />
+        <Route path="/coaching" component={Coaching} />
+        <Route path="/blog" component={Blog} />
+        {/* /blog/archive must stay above /blog/:slug so the literal path wins. */}
+        <Route path="/blog/archive" component={BlogArchive} />
+        <Route path="/blog/:slug" component={BlogArticle} />
+        <Route path="/about" component={About} />
+        <Route path="/events" component={Events} />
+        <Route path="/programs" component={Programs} />
+        <Route path="/contact" component={Contact} />
+        <Route path="/privacy" component={PrivacyPolicy} />
+        <Route path="/orders" component={Orders} />
+        <Route path="/survey" component={PostPurchaseSurvey} />
+        <Route path="/login" component={Login} />
+        <Route path="/admin" component={AdminSubmissions} />
+        <Route path="/admin/submissions" component={AdminSubmissions} />
+        <Route path="/404" component={NotFound} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
   );
 }
 

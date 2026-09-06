@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <!-- maximum-scale=1 removed: it blocked pinch-zoom, which fails WCAG 1.4.4
+         and is flagged directly by Lighthouse accessibility. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Purely Divine Coaching | Nancy Marie Dixon</title>
     <meta
       name="description"

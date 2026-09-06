@@ -12,7 +12,7 @@ import {
   ARTICLE_SEO,
   AUTHOR_NAME,
   AUTHOR_TITLE,
-  BUSINESS_ADDRESS,
+  BUSINESS_REGION,
   BOOKING_URL,
   CONTACT_EMAIL,
   DEFAULT_DESCRIPTION,
@@ -63,9 +63,18 @@ export function matchArticlePath(path: string): string | null {
   return slug;
 }
 
+/**
+ * Typed as ProfessionalService rather than LocalBusiness directly.
+ *
+ * ProfessionalService is a subtype of LocalBusiness in schema.org, so this
+ * still carries every local signal, but without implying a storefront that
+ * clients visit. areaServed then does the real work: it names the Cleveland
+ * cities and the United States together, so the same markup supports the local
+ * terms and the national ones instead of forcing a choice between them.
+ */
 function organizationLd(): Record<string, unknown> {
   return {
-    "@type": ["Organization", "LocalBusiness", "ProfessionalService"],
+    "@type": ["Organization", "ProfessionalService"],
     "@id": ORG_ID,
     name: SITE_NAME,
     legalName: LEGAL_NAME,
@@ -77,9 +86,10 @@ function organizationLd(): Record<string, unknown> {
     founder: { "@id": PERSON_ID },
     address: {
       "@type": "PostalAddress",
-      ...BUSINESS_ADDRESS,
+      ...BUSINESS_REGION,
     },
-    areaServed: SERVICE_AREAS.map(name => ({ "@type": "Place", name })),
+    areaServed: SERVICE_AREAS.map(area => ({ "@type": area.type, name: area.name })),
+    availableLanguage: "en-US",
     knowsAbout: [
       "Christian life coaching",
       "Self-worth",

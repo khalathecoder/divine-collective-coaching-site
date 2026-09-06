@@ -73,7 +73,10 @@ export default function BrandShell({
           <Link href="/" className="min-w-0 flex-1 lg:flex-none lg:mr-auto text-center lg:text-left">
             <img
               src="/manus-storage/Logo(13)_150505f4.png"
-              alt="Divine Collective Logo"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              alt="Purely Divine Coaching, Divine Collective LLC"
               className="h-auto w-24 md:w-32 lg:w-40 aspect-auto inline-block"
             />
           </Link>
@@ -206,9 +209,12 @@ export default function BrandShell({
                 </Link>
               </p>
               <p>
-                <a href="/#programs" className="transition hover:text-brand-gold">
+                {/* The #programs anchor lives on /coaching, not on the homepage.
+                    This pointed at /#programs, so it landed on Home and did
+                    nothing -- on every page of the site. */}
+                <Link href="/coaching#programs" className="transition hover:text-brand-gold">
                   Program suite
-                </a>
+                </Link>
               </p>
               <p>
                 <a href={brand.shopUrl} target="_blank" rel="noreferrer" className="transition hover:text-brand-gold">

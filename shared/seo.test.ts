@@ -199,9 +199,30 @@ describe("resolvePageSeo", () => {
     const types = graph.flatMap(node =>
       Array.isArray(node["@type"]) ? node["@type"] : [node["@type"]]
     );
-    expect(types).toContain("LocalBusiness");
+    // ProfessionalService is a LocalBusiness subtype, so this still carries the
+    // local signals without implying a storefront clients visit.
+    expect(types).toContain("ProfessionalService");
+    expect(types).toContain("Organization");
     expect(types).toContain("Person");
     expect(types).toContain("WebSite");
+  });
+
+  it("claims both the Cleveland area and the whole US as served", () => {
+    const graph = resolvePageSeo("/")["jsonLd"][0]["@graph"] as Record<string, unknown>[];
+    const org = graph.find(node =>
+      (node["@type"] as string[]).includes?.("ProfessionalService")
+    );
+    const areas = (org?.areaServed as { name: string }[]).map(area => area.name);
+    expect(areas).toContain("Cleveland, Ohio");
+    expect(areas).toContain("United States");
+  });
+
+  it("never publishes a street address", () => {
+    // The only address on file is a home address. A service-area business does
+    // not need it to rank locally, and publishing it would expose where she lives.
+    const serialised = JSON.stringify(resolvePageSeo("/").jsonLd);
+    expect(serialised).not.toContain("streetAddress");
+    expect(serialised).not.toContain("Grosvenor");
   });
 
   it("describes an article as a BlogPosting written by Nancy", () => {

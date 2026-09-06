@@ -21,20 +21,33 @@ export const CONTACT_EMAIL = "info@dicollectivellc.com";
 export const BOOKING_URL =
   "https://link.kopsystem.com/widget/bookings/nancy-dixon-personal-calendar-0svswpnv8";
 
-/** Used by LocalBusiness schema. Matches the address in the privacy policy. */
-export const BUSINESS_ADDRESS = {
-  streetAddress: "3765 Grosvenor Rd",
-  addressLocality: "South Euclid",
+/**
+ * The practice targets both the Cleveland area and clients across the US,
+ * working online. That is a "service-area business": it serves a named
+ * territory rather than receiving clients at a premises.
+ *
+ * Region and country only, deliberately no streetAddress. The one address on
+ * file (in the privacy policy) is a home address, and a service-area business
+ * does not need to publish a street to rank locally -- Google takes the
+ * service area from the Business Profile, where the street stays hidden.
+ * Publishing it here would expose where she lives and buy nothing.
+ */
+export const BUSINESS_REGION = {
   addressRegion: "OH",
-  postalCode: "44118",
   addressCountry: "US",
 } as const;
 
+/**
+ * Territories served, local first then national. Emitted as schema.org
+ * areaServed so one listing can compete for "life coach cleveland ohio"
+ * (difficulty 8) and for national terms at the same time.
+ */
 export const SERVICE_AREAS = [
-  "South Euclid, Ohio",
-  "Cleveland Heights, Ohio",
-  "Cleveland, Ohio",
-  "United States",
+  { type: "City", name: "South Euclid, Ohio" },
+  { type: "City", name: "Cleveland Heights, Ohio" },
+  { type: "City", name: "Cleveland, Ohio" },
+  { type: "State", name: "Ohio" },
+  { type: "Country", name: "United States" },
 ] as const;
 
 /** Default social preview image. Swap for a branded 1200x630 asset when one exists. */
@@ -139,9 +152,9 @@ export const ROUTE_SEO: RouteSeo[] = [
   },
   {
     path: "/contact",
-    title: "Book a Discovery Call | Christian Life Coach, Cleveland",
+    title: "Book a Free Discovery Call | Christian Life Coach",
     description:
-      "Book a free discovery call with Nancy Marie Dixon, certified Christian life coach serving Cleveland Heights, South Euclid and clients nationwide online.",
+      "Book a free discovery call with Nancy Marie Dixon, certified Christian life coach for women. Online across the US and in the Cleveland, Ohio area.",
     priority: 0.8,
     changefreq: "monthly",
   },

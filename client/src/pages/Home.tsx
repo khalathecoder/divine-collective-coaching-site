@@ -222,6 +222,9 @@ export default function Home() {
             <div className="relative overflow-hidden rounded-2xl border border-brand-gold/30 bg-white/5 shadow-[0_35px_90px_rgba(8,6,18,0.15)] w-full max-w-sm sm:max-w-md md:max-w-lg md:w-auto">
               <img
                 src={heroPortrait}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 alt="Nancy Marie Dixon - Purely Divine Coaching"
                 className="h-auto w-full object-cover"
               />
@@ -277,6 +280,8 @@ export default function Home() {
               <div className="relative overflow-hidden rounded-2xl border-2 border-brand-gold bg-white/5 shadow-[0_20px_60px_rgba(200,168,75,0.15)] w-full max-w-xs">
                 <img
                   src={bookImage}
+                  loading="lazy"
+                  decoding="async"
                   alt="You Have Something to Say - Use Your Voice Book"
                   className="h-auto w-full object-cover"
                 />

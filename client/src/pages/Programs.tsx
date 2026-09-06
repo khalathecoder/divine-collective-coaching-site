@@ -81,7 +81,7 @@ export default function Programs() {
           <div className="relative mx-auto max-w-7xl px-4">
             <div className="mb-6 flex justify-center"><span className="inline-flex items-center gap-2 rounded-full border border-amber-400/50 bg-amber-400/15 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-amber-200"><Sparkles className="h-4 w-4" /> Featured virtual experience · {MASTERCLASS_SCHEDULE.dateShortLabel}</span></div>
             <div className="grid items-center gap-12 lg:grid-cols-12">
-              <div className="flex justify-center lg:col-span-5"><div className="relative w-full max-w-md rounded-2xl border-2 border-amber-400/60 bg-black p-2 shadow-2xl"><img src={MASTERCLASS_SCHEDULE.imageUrl} alt={`${EVENT_TITLE} book-cover artwork`} className="w-full rounded-xl object-cover" /></div></div>
+              <div className="flex justify-center lg:col-span-5"><div className="relative w-full max-w-md rounded-2xl border-2 border-amber-400/60 bg-black p-2 shadow-2xl"><img src={MASTERCLASS_SCHEDULE.imageUrl} alt={`${EVENT_TITLE} book-cover artwork`} loading="eager" fetchPriority="high" decoding="async" className="w-full rounded-xl object-cover" /></div></div>
               <div className="space-y-6 lg:col-span-7">
                 <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-300">Faith-rooted voice activation</p>
                 <h1 className="font-serif text-4xl font-bold leading-tight text-amber-100 md:text-6xl">{EVENT_TITLE}</h1>
