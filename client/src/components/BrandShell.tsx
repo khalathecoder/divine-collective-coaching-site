@@ -6,12 +6,26 @@ Use deep purple, ivory, and restrained gold to create clarity without visual noi
 import { Link } from "wouter";
 import { brand } from "@/content/siteContent";
 import React, { type ReactNode, useState, useEffect } from "react";
-import { Menu, X, ArrowUp } from "lucide-react";
+import { Menu, X, ArrowUp, ChevronDown } from "lucide-react";
 
-const navItems = [
+type NavChild = { label: string; href: string };
+type NavItem = { label: string; href: string; children?: NavChild[] };
+
+// "/programs" is deliberately absent: it is the B.O.L.D. OUT registration page
+// and Stripe's success and cancel URLs point at it, so the route must keep
+// working -- it just is not a top-level nav entry any more. Events links to it.
+const navItems: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Programs", href: "/programs" },
-  { label: "Purely Divine Coaching", href: "/coaching" },
+  { label: "Events", href: "/events" },
+  {
+    label: "Purely Divine Coaching",
+    href: "/coaching",
+    children: [
+      { label: "Coaching Overview", href: "/coaching" },
+      // The programs table already lives on the coaching page under this anchor.
+      { label: "Programs", href: "/coaching#programs" },
+    ],
+  },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -84,8 +98,51 @@ export default function BrandShell({
           <nav className="hidden items-center gap-7 lg:flex">
             {navItems.map((item) => {
               const isCurrent = item.href === currentPath;
-              const isMail = item.href.startsWith("mailto:");
               const isHash = item.href.includes("#");
+
+              // Opens on hover for pointer devices and on focus-within for
+              // keyboard users. The pt-3 wrapper bridges the gap between the
+              // trigger and the panel so the menu does not close while the
+              // cursor travels down to it.
+              if (item.children) {
+                return (
+                  <div key={item.label} className="group relative">
+                    <Link
+                      href={item.href}
+                      className={`nav-link inline-flex items-center gap-1 text-[0.73rem] uppercase tracking-[0.28em] transition ${
+                        isCurrent ? "text-brand-gold" : "text-cream/70 hover:text-brand-gold"
+                      }`}
+                    >
+                      {item.label}
+                      <ChevronDown className="h-3 w-3" aria-hidden="true" />
+                    </Link>
+
+                    <div className="invisible absolute left-0 top-full z-50 pt-3 opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                      <div className="min-w-[14rem] rounded-lg border border-white/10 bg-black py-2 shadow-xl">
+                        {item.children.map((child) =>
+                          child.href.includes("#") ? (
+                            <a
+                              key={child.label}
+                              href={child.href}
+                              className="block px-5 py-2 text-[0.73rem] uppercase tracking-[0.28em] text-cream/70 transition hover:text-brand-gold"
+                            >
+                              {child.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={child.label}
+                              href={child.href}
+                              className="block px-5 py-2 text-[0.73rem] uppercase tracking-[0.28em] text-cream/70 transition hover:text-brand-gold"
+                            >
+                              {child.label}
+                            </Link>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
 
               if (isHash) {
                 return (
@@ -132,33 +189,61 @@ export default function BrandShell({
             <div className="container space-y-4 py-6">
               {navItems.map((item) => {
                 const isCurrent = item.href === currentPath;
-                const isMail = item.href.startsWith("mailto:");
                 const isHash = item.href.includes("#");
-
-                if (isHash) {
-                  return (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block text-sm uppercase tracking-[0.28em] text-cream/70 transition hover:text-brand-gold"
-                    >
-                      {item.label}
-                    </a>
-                  );
-                }
+                const topClass = `block text-sm uppercase tracking-[0.28em] transition ${
+                  isCurrent ? "text-brand-gold" : "text-cream/70 hover:text-brand-gold"
+                }`;
+                const childClass =
+                  "block text-xs uppercase tracking-[0.28em] text-cream/60 transition hover:text-brand-gold";
 
                 return (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`block text-sm uppercase tracking-[0.28em] transition ${
-                      isCurrent ? "text-brand-gold" : "text-cream/70 hover:text-brand-gold"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
+                  <div key={item.label} className="space-y-3">
+                    {isHash ? (
+                      <a
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={topClass}
+                      >
+                        {item.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={topClass}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+
+                    {/* Children are always visible on mobile: a tap target that
+                        only reveals a submenu costs an extra tap for no gain. */}
+                    {item.children && (
+                      <div className="space-y-3 border-l border-white/10 pl-4">
+                        {item.children.map((child) =>
+                          child.href.includes("#") ? (
+                            <a
+                              key={child.label}
+                              href={child.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={childClass}
+                            >
+                              {child.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={child.label}
+                              href={child.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={childClass}
+                            >
+                              {child.label}
+                            </Link>
+                          )
+                        )}
+                      </div>
+                    )}
+                  </div>
                 );
               })}
               <a href="https://link.kopsystem.com/widget/bookings/nancy-dixon-personal-calendar-0svswpnv8" className="brand-button brand-button-primary inline-flex md:hidden mt-4">
