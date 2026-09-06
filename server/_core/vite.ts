@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import viteConfig from "../../vite.config";
+import { injectSeoIntoHtml, isUnknownRoute } from "./seo";
 
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
@@ -39,7 +40,11 @@ export async function setupVite(app: Express, server: Server) {
         `src="/src/main.tsx?v=${nanoid()}"`
       );
       const page = await vite.transformIndexHtml(url, template);
-      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+      // Same per-route metadata and 404 semantics as production, so SEO
+      // problems show up in development rather than only after deploy.
+      const html = injectSeoIntoHtml(page, url);
+      const status = isUnknownRoute(url) ? 404 : 200;
+      res.status(status).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
       vite.ssrFixStacktrace(e as Error);
       next(e);
@@ -58,10 +63,27 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // index:false is required. With the default, express.static would answer "/"
+  // with the raw index.html and skip the SEO injection below, leaving the
+  // homepage on the generic fallback title.
+  app.use(express.static(distPath, { index: false }));
+
+  const templatePath = path.resolve(distPath, "index.html");
+  // Read once at startup; the built shell does not change while the server runs.
+  const template = fs.existsSync(templatePath)
+    ? fs.readFileSync(templatePath, "utf-8")
+    : "";
 
   // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  app.use("*", (req, res) => {
+    if (!template) {
+      res.status(500).type("text/plain").send("Client build is missing.");
+      return;
+    }
+
+    const url = req.originalUrl;
+    const html = injectSeoIntoHtml(template, url);
+    const status = isUnknownRoute(url) ? 404 : 200;
+    res.status(status).set({ "Content-Type": "text/html" }).send(html);
   });
 }

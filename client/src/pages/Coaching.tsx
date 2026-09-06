@@ -233,6 +233,8 @@ export default function Coaching() {
             <div className="relative overflow-hidden rounded-2xl border border-brand-gold/30 bg-white/5 shadow-[0_35px_90px_rgba(8,6,18,0.15)] max-w-sm w-full">
               <img
                 src={goldVoiceImage}
+              loading="lazy"
+              decoding="async"
                 alt="Voice Activation - Purely Divine Coaching"
                 className="h-auto w-full object-cover"
               />
@@ -246,6 +248,8 @@ export default function Coaching() {
           <div className="relative overflow-hidden rounded-2xl border border-brand-gold/30 bg-white/5 shadow-[0_35px_90px_rgba(8,6,18,0.15)] max-w-lg w-full sm:max-w-md">
             <img
               src={goldVoiceImage}
+              loading="lazy"
+              decoding="async"
               alt="Voice Activation - Purely Divine Coaching"
               className="h-auto w-full object-cover"
             />
@@ -397,7 +401,9 @@ export default function Coaching() {
             <div className="relative overflow-hidden rounded-2xl border border-brand-gold/30 bg-white/5 shadow-[0_35px_90px_rgba(8,6,18,0.15)] max-w-sm w-full">
               <img
                 src={nancyPhoto}
-                alt="Nancy Marie Dixon - Coach"
+                loading="lazy"
+                decoding="async"
+                alt="Nancy Marie Dixon, certified Christian life coach"
                 className="h-auto w-full object-cover"
               />
             </div>

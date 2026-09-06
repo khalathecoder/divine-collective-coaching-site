@@ -119,6 +119,8 @@ function ProductCard({ product, onStripeOpen }: {
       <div className="group rounded-lg border-2 border-brand-gold bg-white/5 overflow-hidden transition-all hover:bg-white/10 hover:shadow-lg">
         <div className="relative h-48 overflow-hidden bg-black">
           <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          loading="lazy"
+          decoding="async"
           {product.badge && <div className="absolute top-3 right-3 bg-brand-gold text-black px-3 py-1 rounded-full text-xs font-semibold">{product.badge}</div>}
         </div>
         <div className="p-4 space-y-3">
@@ -273,7 +275,7 @@ export default function Shop() {
             </button>
             {selectedProductId === "you-have-something-to-say-book" && (
               <>
-                <img src={bookImage} alt="You Have Something to Say...Use Your Voice" className="w-full h-48 object-cover rounded" />
+                <img src={bookImage} alt="You Have Something to Say...Use Your Voice" loading="lazy" decoding="async" className="w-full h-48 object-cover rounded" />
                 <div className="space-y-2">
                   <h3 className="font-serif text-xl text-cream font-semibold">You Have Something to Say...Use Your Voice</h3>
                   <p className="text-sm text-cream/70">A transformational guide for women reclaiming their voice and presence. Instant digital delivery.</p>
@@ -283,7 +285,7 @@ export default function Shop() {
             )}
             {selectedProductId === "divine-mindset-guide" && (
               <>
-                <img src={mindsetImage} alt="Divine Mindset Guide" className="w-full h-48 object-cover rounded" />
+                <img src={mindsetImage} alt="Divine Mindset Guide" loading="lazy" decoding="async" className="w-full h-48 object-cover rounded" />
                 <div className="space-y-2">
                   <h3 className="font-serif text-xl text-cream font-semibold">The Divine Mindset Guide</h3>
                   <p className="text-sm text-cream/70">A companion guide exploring the relationship between your mindset and your voice. Instant digital delivery.</p>

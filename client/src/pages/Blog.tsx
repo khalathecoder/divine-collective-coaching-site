@@ -5,8 +5,12 @@ Focus on typography hierarchy, generous whitespace, and easy navigation.
 Each article should feel like a personal letter from Nancy to the reader.
 */
 import BrandShell from "@/components/BrandShell";
-import { ArrowUpRight, Facebook, Linkedin, Instagram } from "lucide-react";
+import ArticleBody from "@/components/ArticleBody";
+import ShareRow from "@/components/ShareRow";
+import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
+import { Link } from "wouter";
+import { brand } from "@/content/siteContent";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { currentArticles, pastArticles } from "@/content/blogArticles";
@@ -70,7 +74,10 @@ export default function Blog() {
         <div className="relative h-96 md:h-[500px] overflow-hidden">
           <img 
             src={heroBannerUrl} 
-            alt="Blog Hero" 
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            alt="Speak From Purpose, the blog of Nancy Marie Dixon" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -117,10 +124,18 @@ export default function Blog() {
                 <div className="md:col-span-1">
                   <div className="space-y-3">
                     {displayedArticles.map((article) => (
-                      <button
+                      <a
                         key={article.id}
-                        onClick={() => setSelectedArticleId(article.id)}
-                        className={`w-full text-left p-4 rounded-lg transition-all ${
+                        href={`/blog/${article.id}`}
+                        onClick={(event) => {
+                          // Preview in place exactly as before. The href is real
+                          // so crawlers can reach each article own URL, and
+                          // ctrl/cmd-click still opens it in a new tab.
+                          if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+                          event.preventDefault();
+                          setSelectedArticleId(article.id);
+                        }}
+                        className={`block w-full text-left p-4 rounded-lg transition-all ${
                           selectedArticle?.id === article.id
                             ? "bg-brand-gold text-black"
                             : "bg-card hover:bg-card/80 text-foreground"
@@ -136,7 +151,7 @@ export default function Blog() {
                             day: 'numeric'
                           })}
                         </p>
-                      </button>
+                      </a>
                     ))}
 
                     {/* Load More Button for Past Articles */}
@@ -182,16 +197,22 @@ export default function Blog() {
                         </p>
                       </div>
 
-                      <div className="prose prose-invert max-w-none text-foreground">
-                        <div className="whitespace-pre-wrap leading-relaxed">
-                          {selectedArticle.content}
-                        </div>
-                      </div>
+                      <ArticleBody content={selectedArticle.content} />
+
+                      <Link
+                        href={`/blog/${selectedArticle.id}`}
+                        className="inline-flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-brand-gold transition hover:text-brand-gold/80"
+                      >
+                        Read full article
+                        <ArrowUpRight className="h-4 w-4" />
+                      </Link>
 
                       <div className="pt-8 border-t border-border">
                         <div className="flex items-center gap-4">
                           <img 
                             src={heroProfileImageUrl} 
+                            loading="lazy"
+                            decoding="async"
                             alt="Nancy Dixon" 
                             className="w-16 h-16 rounded-full object-cover"
                           />
@@ -206,18 +227,11 @@ export default function Blog() {
 
                       {/* Social Share */}
                       <div className="pt-8 border-t border-border">
-                        <p className="text-sm font-semibold text-foreground mb-4">Share this article</p>
-                        <div className="flex gap-3">
-                          <a href="#" className="p-2 rounded-full bg-card hover:bg-card/80 transition-colors">
-                            <Facebook className="w-5 h-5 text-brand-gold" />
-                          </a>
-                          <a href="#" className="p-2 rounded-full bg-card hover:bg-card/80 transition-colors">
-                            <Linkedin className="w-5 h-5 text-brand-gold" />
-                          </a>
-                          <a href="#" className="p-2 rounded-full bg-card hover:bg-card/80 transition-colors">
-                            <Instagram className="w-5 h-5 text-brand-gold" />
-                          </a>
-                        </div>
+                        <ShareRow
+                          url={`${brand.primaryUrl}/blog/${selectedArticle.id}`}
+                          title={selectedArticle.title}
+                          excerpt={selectedArticle.excerpt}
+                        />
                       </div>
                     </article>
                   )}
