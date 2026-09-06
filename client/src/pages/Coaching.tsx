@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BrandShell from "@/components/BrandShell";
 import { brand, programs } from "@/content/siteContent";
 import { ArrowUpRight, ChevronDown, Sparkles, Star } from "lucide-react";
@@ -184,6 +184,19 @@ function ProgramsAccordion({ onSelectProgram, onOpenPaymentModal, onOpenWaitlist
 }
 
 export default function Coaching() {
+  // The nav links to /coaching#programs. On a cold load the browser resolves
+  // that hash before React has rendered the section, so the jump silently does
+  // nothing. Re-run it after paint. rAF (rather than a timeout) lets layout
+  // settle first without guessing at a delay.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   const [selectedProgram, setSelectedProgram] = useState<any | null>(null);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [waitlistOpen, setWaitlistOpen] = useState(false);
