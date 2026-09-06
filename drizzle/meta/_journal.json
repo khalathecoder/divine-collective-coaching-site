@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1781659392111,
+      "tag": "0000_material_black_cat",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1781729174089,
+      "tag": "0001_perfect_fabian_cortez",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1781743997238,
+      "tag": "0002_adorable_the_liberteens",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1781745715542,
+      "tag": "0003_modern_karma",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1781747189884,
+      "tag": "0004_heavy_thanos",
+      "breakpoints": true
+    }
+  ]
+}

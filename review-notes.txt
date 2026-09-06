@@ -1,0 +1,10 @@
+Homepage preview findings:
+- Hero layout renders correctly with strong contrast and premium editorial composition.
+- Navigation and primary call-to-action are visible and readable.
+- Program suite and shop callout appear in extracted content with the intended structure.
+
+Shop preview findings:
+- Real Purely Divine Coaching FAQ content is present and the placeholder furniture-store text is gone.
+- Catalog filter chips, status labels, and resource cards render successfully.
+- Manager-friendly upkeep panel is visible and reinforces that the catalog is maintained from a centralized content file.
+- No obvious visual breakage was observed in the initial viewport.

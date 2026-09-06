@@ -1,0 +1,16 @@
+{
+  "query": "SELECT id, email, name, role FROM users;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway06.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3y6X3N8sofWu2is.c959f3fb03e8 --database EZFePBM4Ud2fpCqaQdntax --execute SELECT id, email, name, role FROM users;",
+  "rows": [
+    {
+      "id": "1",
+      "email": "nmd.dixon@gmail.com",
+      "name": "nmd.dixon",
+      "role": "admin"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\trole\n1\tnmd.dixon@gmail.com\tnmd.dixon\tadmin\n",
+  "stderr": "",
+  "execution_time_ms": 269
+}
