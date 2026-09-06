@@ -9,6 +9,7 @@ import { registerStripeWebhook } from "./stripeWebhook";
 import { registerMasterclassReminderRoutes } from "./masterclassReminders";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
+import { registerSeoRoutes } from "./seo";
 import { serveStatic, setupVite } from "./vite";
 
 function isPortAvailable(port: number): Promise<boolean> {
@@ -49,6 +50,9 @@ async function startServer() {
       createContext,
     })
   );
+  // Must be registered before the SPA catch-all, otherwise /robots.txt and
+  // /sitemap.xml fall through and return the HTML app shell with a 200.
+  registerSeoRoutes(app);
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);

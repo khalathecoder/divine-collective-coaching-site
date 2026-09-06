@@ -325,3 +325,58 @@ export function sitemapPaths(): string[] {
   const routes = ROUTE_SEO.filter(route => !route.noindex).map(route => route.path);
   return [...routes, ...ARTICLE_SEO.map(article => articlePath(article.slug))];
 }
+
+// --- Outbound link policy ---------------------------------------------------
+
+/**
+ * Hosts whose links are affiliate or otherwise paid placements.
+ *
+ * Any link in article content pointing at one of these is rendered with
+ * rel="sponsored nofollow". Google requires paid and affiliate links to be
+ * qualified this way; unmarked affiliate links are a manual-action risk.
+ *
+ * Add a bare host here (no scheme, no path). Subdomains are matched too, so
+ * "amazon.com" also covers "www.amazon.com".
+ */
+export const AFFILIATE_DOMAINS: string[] = [
+  "amazon.com",
+  "amzn.to",
+  "shareasale.com",
+  "clkbank.net",
+  "gumroad.com",
+];
+
+export type LinkKind = "internal" | "external" | "affiliate";
+
+/** Classifies a link so the renderer can pick the right rel and target. */
+export function classifyLink(href: string): LinkKind {
+  if (href.startsWith("/") || href.startsWith("#")) return "internal";
+
+  let host: string;
+  try {
+    host = new URL(href).hostname.toLowerCase().replace(/^www\./, "");
+  } catch {
+    // Not a parseable absolute URL - treat as internal and let the browser resolve it.
+    return "internal";
+  }
+
+  if (host === new URL(SITE_URL).hostname.replace(/^www\./, "")) return "internal";
+
+  const isAffiliate = AFFILIATE_DOMAINS.some(
+    domain => host === domain || host.endsWith(`.${domain}`)
+  );
+
+  return isAffiliate ? "affiliate" : "external";
+}
+
+/** The rel value each link kind must carry. */
+export function relForLink(kind: LinkKind): string | undefined {
+  switch (kind) {
+    case "affiliate":
+      return "sponsored nofollow noopener noreferrer";
+    case "external":
+      return "noopener noreferrer";
+    default:
+      return undefined;
+  }
+}

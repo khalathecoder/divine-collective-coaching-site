@@ -9,6 +9,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Seo from "./components/Seo";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -16,6 +17,7 @@ import Coaching from "./pages/Coaching";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import BlogArchive from "./pages/BlogArchive";
+import BlogArticle from "./pages/BlogArticle";
 import Contact from "./pages/Contact";
 import Events from "./pages/Events";
 import Programs from "./pages/Programs";
@@ -69,7 +71,9 @@ function Router() {
       />
       <Route path="/coaching" component={Coaching} />
       <Route path="/blog" component={Blog} />
+      {/* /blog/archive must stay above /blog/:slug so the literal path wins. */}
       <Route path="/blog/archive" component={BlogArchive} />
+      <Route path="/blog/:slug" component={BlogArticle} />
       <Route path="/about" component={About} />
       <Route path="/events" component={Events} />
       <Route path="/programs" component={Programs} />
@@ -92,6 +96,9 @@ function App() {
       <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
+          {/* Keeps title, description, canonical and JSON-LD correct as wouter
+              changes routes without a page load. */}
+          <Seo />
           <Router />
         </TooltipProvider>
       </ThemeProvider>
