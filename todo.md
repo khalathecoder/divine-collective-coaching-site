@@ -415,7 +415,7 @@
 - [x] Save a checkpoint if code changes are needed and provide the user with the reminder-testing instructions.
 
 ## Divine Collective GitHub Export (September 2026)
-- [ ] Confirm the connected GitHub account, intended repository name, and visibility before export.
-- [ ] Verify the project excludes secrets, environment files, generated assets, and deployment-only credentials from the repository.
-- [ ] Create the Divine Collective GitHub repository and push the current project.
-- [ ] Verify the repository URL, default branch, and initial commit.
+- [x] Confirm the connected GitHub account, intended repository name, and visibility before export; created `khalathecoder/divine-collective-coaching-site` as a private repository.
+- [x] Verify the project excludes secrets, environment files, generated assets, and deployment-only credentials from the repository; `.project-config.json` is ignored and absent from the export.
+- [x] Create the Divine Collective GitHub repository and push the current project.
+- [x] Verify the repository URL, default branch, and initial commit.
