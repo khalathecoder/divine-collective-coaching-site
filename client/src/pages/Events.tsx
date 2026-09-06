@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { currentEvents, pastEvents } from "@/content/events";
 import { Calendar, Clock, MapPin } from "lucide-react";
+import { Link } from "wouter";
 
 const ITEMS_PER_PAGE = 3;
 
@@ -162,7 +163,12 @@ export default function Events() {
                                 asChild
                                 className="w-full mt-4 bg-brand-gold text-black hover:bg-brand-gold/90"
                               >
-                                <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
+                                <a
+                                  href={event.registrationUrl}
+                                  {...(/^https?:/i.test(event.registrationUrl)
+                                    ? { target: "_blank", rel: "noopener noreferrer" }
+                                    : {})}
+                                >
                                   Register Now
                                 </a>
                               </Button>
@@ -189,27 +195,6 @@ export default function Events() {
               </TabsContent>
             </Tabs>
           </div>
-
-          {/* Featured Event Flyer - Only show for current events */}
-          {activeTab === "current" && (
-            <div className="space-y-6 border-t border-brand-gold/20 pt-12">
-              <div className="space-y-2">
-                <h2 className="section-title">Featured Event</h2>
-                <p className="text-muted-foreground">
-                  Explore our upcoming events and register to secure your spot.
-                </p>
-              </div>
-
-              <div className="rounded-lg border border-brand-gold/30 overflow-hidden bg-white/5 p-6">
-                <iframe
-                  src="https://shefoundvoice-mnzatgji.manus.space/"
-                  title="Events Flyer"
-                  className="w-full h-screen rounded-lg border border-brand-gold/20"
-                  style={{ minHeight: "800px" }}
-                />
-              </div>
-            </div>
-          )}
 
           {/* Events Info */}
           <div className="space-y-6 border-t border-brand-gold/20 pt-12">
@@ -243,14 +228,12 @@ export default function Events() {
               Register for an upcoming event and take the first step toward finding your voice and walking boldly into your purpose.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <a
-                href="https://shefoundvoice-mnzatgji.manus.space/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/programs"
                 className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-brand-gold text-black font-semibold hover:bg-brand-gold/90 transition-colors"
               >
                 Register Now
-              </a>
+              </Link>
               <a
                 href="/contact"
                 className="inline-flex items-center justify-center px-8 py-3 rounded-full border border-brand-gold text-brand-gold font-semibold hover:bg-brand-gold/10 transition-colors"

@@ -65,6 +65,16 @@ export const currentEvents: Event[] = [
 // Past events (completed)
 export const pastEvents: Event[] = [
   {
+    id: "she-found-her-voice",
+    title: "She Found Her Voice",
+    description:
+      "A book signing and live voice experience: an intimate evening of story, spoken word, and the unapologetic power of a woman who dared to speak.",
+    date: new Date("2026-06-26T00:00:00"),
+    time: "5:30 PM - 7:30 PM",
+    location: "COHatch Beachwood, 26300 Cedar Rd, Suite 1105, Beachwood, OH 44122",
+    type: "community",
+  },
+  {
     id: "spring-workshop-2026",
     title: "Spring Voice Workshop",
     description: "A transformative workshop that helped women discover their authentic voice and break through limiting beliefs.",
