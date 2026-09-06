@@ -1,3 +1,5 @@
+import { MASTERCLASS_SCHEDULE } from "@shared/masterclassSchedule";
+
 export interface Event {
   id: string;
   title: string;
@@ -12,6 +14,22 @@ export interface Event {
 
 // Current events (upcoming)
 export const currentEvents: Event[] = [
+  {
+    // Sourced from MASTERCLASS_SCHEDULE so the date, time and format can never
+    // drift from the Programs page, which is where registration actually happens.
+    // The date is built at local midnight ("...T00:00:00", not a bare "YYYY-MM-DD")
+    // because a bare date parses as UTC and renders a day early west of Greenwich.
+    id: "bold-out-voice-activation",
+    title: MASTERCLASS_SCHEDULE.eventName,
+    description:
+      "A faith-rooted voice activation experience with practical exercises, B.O.L.D. Voice Framework teaching, seven Bold Declarations, and live Q&A with Nancy. For women who want to stop shrinking and start showing up.",
+    date: new Date(`${MASTERCLASS_SCHEDULE.dateIso}T00:00:00`),
+    time: MASTERCLASS_SCHEDULE.windowLabel,
+    location: MASTERCLASS_SCHEDULE.formatLabel,
+    type: "workshop",
+    registrationUrl: "/programs",
+    image: MASTERCLASS_SCHEDULE.imageUrl,
+  },
   {
     id: "coaching-circle-sept",
     title: "Monthly Coaching Circle",
