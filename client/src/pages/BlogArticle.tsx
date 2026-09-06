@@ -15,6 +15,7 @@ Matches the typography and shell of the main blog page.
 
 import BrandShell from "@/components/BrandShell";
 import ArticleBody from "@/components/ArticleBody";
+import ArticleEnrichment from "@/components/ArticleEnrichment";
 import NotFound from "@/pages/NotFound";
 import { allArticles, getArticleById } from "@/content/blogArticles";
 import { brand } from "@/content/siteContent";
@@ -146,6 +147,10 @@ export default function BlogArticle() {
             </header>
 
             <ArticleBody content={article.content} />
+
+            {/* Proposed additions (scripture, FAQ, internal links). See
+                shared/blogEnrichment.ts -- pending Nancy's approval. */}
+            <ArticleEnrichment slug={article.id} />
 
             {/* Author block: a visible, on-page E-E-A-T signal that matches the
                 Person schema in the head. */}

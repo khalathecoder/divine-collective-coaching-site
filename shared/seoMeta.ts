@@ -7,6 +7,7 @@
  */
 
 import { getArticleById, type BlogArticle } from "./blogArticles";
+import { getArticleEnrichment } from "./blogEnrichment";
 import {
   ARTICLE_SEO,
   AUTHOR_NAME,
@@ -173,6 +174,29 @@ function blogPostingLd(article: BlogArticle): Record<string, unknown> {
   };
 }
 
+/**
+ * FAQPage markup for the question block appended to a post.
+ *
+ * Google stopped showing FAQ rich results for most sites in 2023, so this will
+ * not produce the expandable snippet it once did. It is still worth emitting:
+ * it states plainly which text answers which question, which helps the passage
+ * be selected for a featured snippet or an AI overview.
+ */
+function faqLd(slug: string, url: string): Record<string, unknown> | null {
+  const faq = getArticleEnrichment(slug)?.faq;
+  if (!faq || faq.length === 0) return null;
+
+  return {
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    mainEntity: faq.map(entry => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: { "@type": "Answer", text: entry.answer },
+    })),
+  };
+}
+
 function blogLd(): Record<string, unknown> {
   return {
     "@type": "Blog",
@@ -301,6 +325,8 @@ function resolveArticleSeo(slug: string): ResolvedSeo {
   }
 
   const published = article.date.toISOString();
+  const faq = faqLd(article.id, absoluteUrl(`/blog/${article.id}`));
+  const articleFaq = faq ? [faq] : [];
 
   return {
     // Falls back to the on-page headline if no search-facing title is written yet.
@@ -321,6 +347,7 @@ function resolveArticleSeo(slug: string): ResolvedSeo {
       websiteLd(),
       personLd(),
       blogPostingLd(article),
+      ...articleFaq,
       breadcrumbLd([
         { name: "Home", path: "/" },
         { name: "Blog", path: "/blog" },
