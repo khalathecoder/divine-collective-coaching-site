@@ -74,7 +74,10 @@ export default function Blog() {
         <div className="relative h-96 md:h-[500px] overflow-hidden">
           <img 
             src={heroBannerUrl} 
-            alt="Blog Hero" 
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            alt="Speak From Purpose, the blog of Nancy Marie Dixon" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -208,6 +211,8 @@ export default function Blog() {
                         <div className="flex items-center gap-4">
                           <img 
                             src={heroProfileImageUrl} 
+                            loading="lazy"
+                            decoding="async"
                             alt="Nancy Dixon" 
                             className="w-16 h-16 rounded-full object-cover"
                           />
